@@ -10,7 +10,7 @@ import Searchbar from './Searchbar/SearchBar';
 export default class App extends Component {
   state = {
     request: '',
-    page: 12,
+    page: 1,
     status: 'idle',
   };
 
@@ -19,7 +19,7 @@ export default class App extends Component {
   };
 
   handlePageChange = () => {
-    this.setState({ page: this.state.page + 12 });
+    this.setState({ page: this.state.page + 1 });
   };
 
   HandleStatusChange = newStatus => {

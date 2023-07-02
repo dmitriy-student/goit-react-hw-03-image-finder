@@ -22,7 +22,7 @@ export default class ImageGallery extends Component {
       this.props.HandleStatusChange('pending');
       setTimeout(() => {
         fetch(
-          `https://pixabay.com/api/?q=${this.props.request}&page=1&key=36188192-df3cf63ec6f6149d9f5656270&image_type=photo&orientation=horizontal&per_page=${this.props.page}`
+          `https://pixabay.com/api/?q=${this.props.request}&page=${this.props.page}&key=36188192-df3cf63ec6f6149d9f5656270&image_type=photo&orientation=horizontal&per_page=12`
         )
           .then(res => {
             if (res.ok) {
