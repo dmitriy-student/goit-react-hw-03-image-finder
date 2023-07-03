@@ -20,42 +20,39 @@ export default class ImageGallery extends Component {
     ) {
       this.setState({ images: [], total: null });
       this.props.HandleStatusChange('pending');
-      setTimeout(() => {
-        fetch(
-          `https://pixabay.com/api/?q=${this.props.request}&page=${this.props.page}&key=36188192-df3cf63ec6f6149d9f5656270&image_type=photo&orientation=horizontal&per_page=12`
+
+      fetch(
+        `https://pixabay.com/api/?q=${this.props.request}&page=${this.props.page}&key=36188192-df3cf63ec6f6149d9f5656270&image_type=photo&orientation=horizontal&per_page=12`
+      )
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(new Error('Ooops...'));
+        })
+        .then(images =>
+          this.setState({ images: images.hits, total: images.total })
         )
-          .then(res => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(new Error('Ooops...'));
-          })
-          .then(images =>
-            this.setState({ images: images.hits, total: images.total })
-          )
-          .catch(error => this.setState({ error }))
-          .finally(this.props.HandleStatusChange('resolve'));
-      }, 1000);
+        .catch(error => this.setState({ error }))
+        .finally(this.props.HandleStatusChange('resolve'));
     }
   }
 
   onOpenModal = largeImageURL => {
-    window.addEventListener('keydown', this.closeModalonESC);
-
     this.setState({ showModal: true, largeImageURL });
   };
+
+  handleChangeStateModal = () => {};
 
   closeModalonESC = evt => {
     if (evt.code === 'Escape') {
       this.setState({ showModal: false });
-      window.removeEventListener('keydown', this.closeModalonESC);
     }
   };
 
   closeModalonOverlay = evt => {
     if (evt.target === evt.currentTarget) {
       this.setState({ showModal: false });
-      window.removeEventListener('keydown', this.closeModalonESC);
     }
   };
 
@@ -77,6 +74,7 @@ export default class ImageGallery extends Component {
         {this.state.showModal && (
           <Modal
             closeModal={this.closeModalonOverlay}
+            closeModalonESC={this.closeModalonESC}
             largeImageURL={this.state.largeImageURL}
           />
         )}
